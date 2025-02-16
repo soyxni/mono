@@ -1,0 +1,126 @@
+/* 검색 섹션 */
+.search-tab {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #f8f9fa;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  z-index: 1000;
+  transition: width 0.3s ease;
+}
+
+/* 탭 숨김 상태 */
+.search-tab.hidden {
+  width: 0;
+  overflow: hidden;
+}
+
+/* 메인 콘텐츠 */
+.main-content {
+  transition: margin-left 0.3s ease;
+  padding: 20px;
+}
+
+/* 탭 토글 버튼 */
+.toggle-button {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px 0 0 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  font-size: 1.2rem;
+}
+
+/* 열림 상태의 버튼 */
+.toggle-button.open {
+  left: 40%;
+  border-radius: 0 5px 5px 0;
+}
+
+/* 닫힘 상태의 버튼 */
+.toggle-button.close {
+  left: 0;
+}
+
+/* 버튼 hover 효과 */
+.toggle-button:hover {
+  background-color: #0056b3;
+}
+
+/* SearchResult */
+.search-results {
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.results-table th,
+.results-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.results-table th {
+  background: #f4f4f4;
+  font-weight: bold;
+}
+
+.results-table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.results-table tr:hover {
+  background: #f1f1f1;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+}
+
+.pagination button:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+

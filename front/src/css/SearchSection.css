@@ -1,0 +1,83 @@
+/* 내비게이션 바 스타일 */
+.navbar {
+  top: 0;
+  background-color: #007bff; /* 파란색 배경 */
+  color: white; /* 흰색 텍스트 */
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+/* 검색 섹션 스타일 */
+.search-section {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 40%; /* 기본 너비 */
+  background-color: #f8f9fa;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  overflow-y: auto; /* 스크롤 활성화 */
+}
+
+.search-item {
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.input-with-icon {
+  position: relative; /* 부모 요소 기준으로 자식 요소 위치 설정 */
+}
+
+.input-with-icon input {
+  width: 100%; /* 입력 필드 너비 */
+  padding: 10px 35px 10px 10px; /* 오른쪽에 아이콘 공간 확보 */
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.input-with-icon .icon-search {
+  position: absolute; /* 부모를 기준으로 위치 설정 */
+  top: 50%; /* 수직 중앙 정렬 */
+  right: 10px; /* 오른쪽 여백 */
+  transform: translateY(-50%); /* 수직 정렬 보정 */
+  width: 20px; /* 아이콘 크기 */
+  height: 20px;
+  pointer-events: none; /* 아이콘 클릭 방지 */
+}
+
+
+.search-item label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.search-item select,
+.search-item button {
+
+  padding: 10px;
+  margin-top: 5px;
+  font-size: 1rem;
+}
+
+.search-item input{
+  height: 30px;
+  padding: 3px;
+  margin-top: 5px;
+  font-size: 1rem;
+}
+
+.search-item button {
+  background-color: #E6E6E6;
+  color: black;
+  border: none;
+  cursor: pointer;
+}
+
+.search-item button:hover {
+  background-color: #E6EFFE;
+}
