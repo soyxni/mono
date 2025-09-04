@@ -180,7 +180,9 @@ public class AdminController {
 
         if (adminOptional.isPresent()) {
             Admin admin = adminOptional.get();
-            if (admin.getPassword().equals(loginRequest.getPassword())) {
+            if (admin.getPassword().equals(loginRequest.getPassword())
+                && "supervisor".equalsIgnoreCase(admin.getRole()))
+            {
                 return ResponseEntity.ok(true);  // 관리자 확인됨
             }
         }
