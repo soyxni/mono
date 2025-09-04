@@ -98,7 +98,7 @@ const SearchResults = ({
       console.error(err);
       alert("엑셀 다운로드 실패");
     } finally{
-      setDownloading(false); //로딩종료
+      setTimeout(() => setDownloading(false), 1500);
     }
   };
 
