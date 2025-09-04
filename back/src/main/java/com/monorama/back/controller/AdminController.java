@@ -173,4 +173,17 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @PostMapping("/check")
+    public ResponseEntity<Boolean> checkAdmin(@RequestBody Admin loginRequest) {
+        Optional<Admin> adminOptional = adminRepository.findById(loginRequest.getId());
+
+        if (adminOptional.isPresent()) {
+            Admin admin = adminOptional.get();
+            if (admin.getPassword().equals(loginRequest.getPassword())) {
+                return ResponseEntity.ok(true);  // 관리자 확인됨
+            }
+        }
+        return ResponseEntity.ok(false); // 관리자 아님
+    }
 }
