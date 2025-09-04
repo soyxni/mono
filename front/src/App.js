@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import MainPage from "./pages/MainPage";
 import "./App.css"; // 공통 스타일 파일
+import LoginPage from "./pages/LoginPage";
 const TestPage = () => <div>테스트 페이지</div>;
 
 const App = () => {
@@ -11,7 +12,8 @@ const App = () => {
                 <Routes>
                     {/* "/" 경로에 MainPage 렌더링 */}
                     <Route path="/" element={<MainPage />} />
-                    <Route path="/test" element={<TestPage />} />
+                    {/* <Route path="/test" element={<TestPage />} /> */}
+                    <Route path="/admin-login" element={<LoginPage />} />
                 </Routes>
             </div>
         </Router>

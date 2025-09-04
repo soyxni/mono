@@ -1,277 +1,99 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import "../css/MainPage.css"; // 필요한 스타일 포함
+import axios from "axios";
 
-const SearchResults = () => {
-  const [results, setResults] = useState([
-    {
-      id: 1,
-      name: "(사)인구보건복지협회 서울지회 가족보건의원",
-      size: "의원",
-      location: "서울 광진구",
-      category: "예방접종료",
-      subcategory: "인플루엔자(독감)",
-      detail: "보령플루V테트라백신주",
-      price_category: "독감_4가",
-      price:"23,000",
-      price_specific:"",
-      price_maxmin:"23,000~23,000",
-      price_mid:"40,000"
-    },
-    {
-      id: 2,
-      name: "sample2",
-      size: "",
-      location: "",
-      category: "",
-      subcategory: "",
-      detail: "",
-      price_category: "",
-      price:"",
-      price_specific:"",
-      price_maxmin:"",
-      price_mid:""
-    },
-    {
-      id: 3,
-      name: "sample3",
-      size: "",
-      location: "",
-      category: "",
-      subcategory: "",
-      detail: "",
-      price_category: "",
-      price:"",
-      price_specific:"",
-      price_maxmin:"",
-      price_mid:""
-    },
-    {
-      id: 4,
-      name: "sample4",
-      size: "",
-      location: "",
-      category: "",
-      subcategory: "",
-      detail: "",
-      price_category: "",
-      price:"",
-      price_specific:"",
-      price_maxmin:"",
-      price_mid:""
-    },
-    {
-      id: 5,
-      name: "sample5",
-      size: "",
-      location: "",
-      category: "",
-      subcategory: "",
-      detail: "",
-      price_category: "",
-      price:"",
-      price_specific:"",
-      price_maxmin:"",
-      price_mid:""
-    },
-    {
-      id: 6,
-      name: "sample6",
-      size: "",
-      location: "",
-      category: "",
-      subcategory: "",
-      detail: "",
-      price_category: "",
-      price:"",
-      price_specific:"",
-      price_maxmin:"",
-      price_mid:""
-    },
-    {
-      id: 7,
-      name: "sample7",
-      size: "",
-      location: "",
-      category: "",
-      subcategory: "",
-      detail: "",
-      price_category: "",
-      price:"",
-      price_specific:"",
-      price_maxmin:"",
-      price_mid:""
-    },
-    {
-      id: 8,
-      name: "sample8",
-      size: "",
-      location: "",
-      category: "",
-      subcategory: "",
-      detail: "",
-      price_category: "",
-      price:"",
-      price_specific:"",
-      price_maxmin:"",
-      price_mid:""
-    },
-    {
-      id: 9,
-      name: "sample9",
-      size: "",
-      location: "",
-      category: "",
-      subcategory: "",
-      detail: "",
-      price_category: "",
-      price:"",
-      price_specific:"",
-      price_maxmin:"",
-      price_mid:""
-    },
-    {
-      id: 10,
-      name: "sample10",
-      size: "",
-      location: "",
-      category: "",
-      subcategory: "",
-      detail: "",
-      price_category: "",
-      price:"",
-      price_specific:"",
-      price_maxmin:"",
-      price_mid:""
-    },
-    {
-      id: 11,
-      name: "sample11",
-      size: "",
-      location: "",
-      category: "",
-      subcategory: "",
-      detail: "",
-      price_category: "",
-      price:"",
-      price_specific:"",
-      price_maxmin:"",
-      price_mid:""
-    },
-    {
-      id: 12,
-      name: "sample12",
-      size: "",
-      location: "",
-      category: "",
-      subcategory: "",
-      detail: "",
-      price_category: "",
-      price:"",
-      price_specific:"",
-      price_maxmin:"",
-      price_mid:""
-    },
-    {
-      id: 13,
-      name: "sample13",
-      size: "",
-      location: "",
-      category: "",
-      subcategory: "",
-      detail: "",
-      price_category: "",
-      price:"",
-      price_specific:"",
-      price_maxmin:"",
-      price_mid:""
-    },
-    {
-      id: 14,
-      name: "sample14",
-      size: "",
-      location: "",
-      category: "",
-      subcategory: "",
-      detail: "",
-      price_category: "",
-      price:"",
-      price_specific:"",
-      price_maxmin:"",
-      price_mid:""
-    },
-    {
-      id: 15,
-      name: "sample15",
-      size: "",
-      location: "",
-      category: "",
-      subcategory: "",
-      detail: "",
-      price_category: "",
-      price:"",
-      price_specific:"",
-      price_maxmin:"",
-      price_mid:""
-    },
-    {
-      id: 16,
-      name: "sample16",
-      size: "",
-      location: "",
-      category: "",
-      subcategory: "",
-      detail: "",
-      price_category: "",
-      price:"",
-      price_specific:"",
-      price_maxmin:"",
-      price_mid:""
-    },
-    {
-      id: 17,
-      name: "sample17",
-      size: "",
-      location: "",
-      category: "",
-      subcategory: "",
-      detail: "",
-      price_category: "",
-      price:"",
-      price_specific:"",
-      price_maxmin:"",
-      price_mid:""
-    },
-  ]);
+const SearchResults = ({
+  results = [],
+  selectedSido = "",
+  selectedSggu = "",
+  selectedClCd = "",
+  selectedNpay = ""
+}) => {
 
   const [sortOption, setSortOption] = useState("정렬기준 선택");
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortedResults, setSortedResults] = useState(results);
 
-  const totalPages = Math.ceil(results.length / itemsPerPage);
+  useEffect(() => {
+    setSortedResults(results);
+  }, [results]);
 
   // 현재 페이지에 표시할 데이터 계산
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = results.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = sortedResults.slice(indexOfFirstItem, indexOfLastItem); // ✅ 수정
+  const totalPages = Math.ceil(sortedResults.length / itemsPerPage);
 
   const handleSortChange = (event) => {
-    setSortOption(event.target.value);
-  };
+    const selected = event.target.value;
+    setSortOption(selected);
+
+    let sorted = [...results];
+    if (selected === "의료기관명↑") {
+      sorted.sort((a, b) => a.yadmNm.localeCompare(b.yadmNm));
+    } else if (selected === "의료기관명↓") {
+      sorted.sort((a, b) => b.yadmNm.localeCompare(a.yadmNm));
+    }
+
+    setSortedResults(sorted);
+    setCurrentPage(1);
+  }; 
 
   const handleItemsPerPageChange = (event) => {
     setItemsPerPage(parseInt(event.target.value, 10));
     setCurrentPage(1); // 페이지 변경 시 첫 페이지로 초기화
   };
-
   const handlePageChange = (page) => {
     setCurrentPage(page);
+  };
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
+
+  const handleExcelDownload = async () => {
+    try {
+      const payload = {
+        results,                  // 기존 결과 배열
+        sidoCdNm: selectedSido || "전체",   
+        sgguCdNm: selectedSggu || "전체",   
+        clCdNm: selectedClCd || "전체",     
+        npayKorNm: selectedNpay || "",  
+      };
+  
+      const res = await axios.post(
+        "http://localhost:8080/api/admin/excel-download",
+        payload,
+        { responseType: "blob" }
+      );
+  
+      // 서버가 filename*=만 주므로 굳이 복잡한 파싱 필요 없음 (있어도 OK)
+      const cd = res.headers["content-disposition"] || "";
+      const m = /filename\*=UTF-8''([^;]+)/i.exec(cd);
+      const filename = m ? decodeURIComponent(m[1]) : "download.csv";
+  
+      const blob = new Blob([res.data], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename; // 서버 파일명 그대로 저장
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err);
+      alert("엑셀 다운로드 실패");
+    }
   };
 
   return (
     <div className="search-results">
       <div className="results-header">
         <span>검색결과 총 {results.length}건</span>
-        <button className="excel-download-btn">검색 결과 Excel 다운받기</button>
+        {isAdmin && (
+          <button className="excel-download-btn" onClick={handleExcelDownload}>
+            검색 결과 Excel 다운받기
+          </button>
+        )}
         <div className="controls">
           <select value={sortOption} onChange={handleSortChange}>
             <option>정렬기준 선택</option>
@@ -292,7 +114,7 @@ const SearchResults = () => {
             <th>의료기관명</th>
             <th>의료기관규모</th>
             <th>소재지</th>
-            <th>증분류</th>
+            <th>중분류</th>
             <th>소분류</th>
             <th>상세분류</th>
             <th>가격정보 구분</th>
@@ -303,21 +125,24 @@ const SearchResults = () => {
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((result) => (
-            <tr key={result.id}>
-              <td>{result.name}</td>
-              <td>{result.size}</td>
-              <td>{result.location}</td>
-              <td>{result.category}</td>
-              <td>{result.subcategory}</td>
-              <td>{result.detail}</td>
-              <td>{result.price_category}</td>
-              <td>{result.price}</td>
-              <td>{result.price_specific}</td>
-              <td>{result.price_maxmin}</td>
-              <td>{result.price_mid}</td>
-            </tr>
-          ))}
+          {currentItems.map((result, index) => {
+            const [middle, small = "", detail = ""] = result.npayKorNm.split("/");
+            return (
+              <tr key={index}>
+                <td>{result.yadmNm}</td>
+                <td>{result.clCdNm}</td>
+                <td>{`${result.sidoCdNm} ${result.sgguCdNm}`}</td>
+                <td>{middle}</td>
+                <td>{small}</td>
+                <td>{detail || "-"}</td>
+                <td></td>
+                <td>{result.curAmt}</td>
+                <td></td>
+                <td>{`${result.minPrc} ~ ${result.maxPrc}`}</td>
+                <td>{result.medianPrc}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
 
@@ -328,27 +153,48 @@ const SearchResults = () => {
         >
           {"<<"}
         </button>
+
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
         >
           {"<"}
         </button>
-        {Array.from({ length: totalPages }, (_, index) => (
-          <button
-            key={index + 1}
-            onClick={() => handlePageChange(index + 1)}
-            className={currentPage === index + 1 ? "active" : ""}
-          >
-            {index + 1}
-          </button>
-        ))}
+
+        {(() => {
+          const visibleRange = 5;
+          const half = Math.floor(visibleRange / 2);
+          let startPage = Math.max(1, currentPage - half);
+          let endPage = startPage + visibleRange - 1;
+
+          if (endPage > totalPages) {
+            endPage = totalPages;
+            startPage = Math.max(1, endPage - visibleRange + 1);
+          }
+
+          const pages = [];
+          for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
+          }
+
+          return pages.map((page) => (
+            <button
+              key={page}
+              onClick={() => handlePageChange(page)}
+              className={currentPage === page ? "active" : ""}
+            >
+              {page}
+            </button>
+          ));
+        })()}
+
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
         >
           {">"}
         </button>
+
         <button
           onClick={() => handlePageChange(totalPages)}
           disabled={currentPage === totalPages}

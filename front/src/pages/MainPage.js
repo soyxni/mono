@@ -1,10 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SearchSection from "../components/SearchSection";
 import SearchResults from "../components/SearchResults";
 import "../css/MainPage.css"; // MainPage 스타일
+import { useNavigate } from "react-router-dom";
 
 const MainPage = () => {
     const [isSearchTabOpen, setIsSearchTabOpen] = useState(false); // 검색 섹션 열림 상태 관리
+    const [searchResults, setSearchResults] = useState([]);
+    
+    const navigate = useNavigate();
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    useEffect(() => {
+        const adminStatus = localStorage.getItem("isAdmin");
+        setIsAdmin(adminStatus === "true");
+    }, []);
 
     const toggleSearchTab = () => {
         setIsSearchTabOpen((prevState) => !prevState); // 상태 반전
@@ -20,13 +30,30 @@ const MainPage = () => {
                     transition: "width 0.3s ease",
                 }}
             >
-                {isSearchTabOpen && <SearchSection />} {/* 탭이 열렸을 때만 렌더링 */}
+                {isSearchTabOpen && <SearchSection setSearchResults={setSearchResults}/>} {/* 탭이 열렸을 때만 렌더링 */}
             </div>
+
+            <div style={{ position: "absolute", top: "20px", right: "30px" }}>
+                {isAdmin ? (
+                    <button
+                    onClick={() => {
+                        localStorage.removeItem("isAdmin");
+                        setIsAdmin(false);
+                        navigate("/");
+                    }}
+                    >
+                        관리자 로그아웃
+                    </button>
+                ) : (
+                    <button onClick={() => navigate("/admin-login")}>관리자 로그인</button>
+                )}
+            </div>
+
 
             {/* 메인 페이지 */}
             <div className="main-content" style={{ marginLeft: isSearchTabOpen ? "40%" : "0" }}>
                 <h1>비급여 진료비용 정보</h1>
-                <SearchResults />
+                <SearchResults results={searchResults}/>
             </div>
 
             {/* 탭 토글 버튼 */}

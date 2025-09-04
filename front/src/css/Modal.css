@@ -74,6 +74,34 @@ ul {
   padding-left: 20px;
 }
 
+ul.level-0 {
+  margin-left: 10px;
+}
+
+ul.level-1 {
+  margin-left: 20px;
+}
+
+ul.level-2 {
+  margin-left: 30px;
+}
+
+.level-0-item label {
+  font-weight: bold;
+  color: #222;
+}
+
+.level-1-item label {
+  font-weight: normal;
+  color: #444;
+}
+
+.level-2-item label {
+  font-weight: normal;
+  color: #666;
+  font-size: 0.95rem;
+}
+
 .item {
   margin-bottom: 10px;
   display: flex;
