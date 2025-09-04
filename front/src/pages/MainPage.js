@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import SearchSection from "../components/SearchSection";
 import SearchResults from "../components/SearchResults";
+import axios from "axios";
+
 import "../css/MainPage.css"; // MainPage 스타일
 import { useNavigate } from "react-router-dom";
 
@@ -17,8 +19,28 @@ const MainPage = () => {
     const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
-        const adminStatus = localStorage.getItem("isAdmin");
-        setIsAdmin(adminStatus === "true");
+        const checkAdmin = async () => {
+            try {
+                const id = localStorage.getItem("userId");
+                const password = localStorage.getItem("userPw");
+                if (!id || !password) {
+                    setIsAdmin(false);
+                    return;
+                }
+
+                const res = await axios.post("http://localhost:8080/api/admin/check", {
+                    id,
+                    password,
+                });
+
+                setIsAdmin(res.data === true); // 백엔드에서 true 내려주면 관리자
+            } catch (err) {
+                console.error("관리자 확인 실패:", err);
+                setIsAdmin(false);
+            }
+        };
+
+        checkAdmin();
     }, []);
 
     const toggleSearchTab = () => {
@@ -49,12 +71,13 @@ const MainPage = () => {
                 {isAdmin ? (
                     <button
                     onClick={() => {
-                        localStorage.removeItem("isAdmin");
+                        localStorage.removeItem("userId");
+                        localStorage.removeItem("userPw");
                         setIsAdmin(false);
                         navigate("/");
                     }}
                     >
-                        관리자 로그아웃
+                        로그아웃
                     </button>
                 ) : (
                     <button onClick={() => navigate("/admin-login")}>관리자 로그인</button>

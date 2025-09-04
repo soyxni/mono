@@ -15,10 +15,35 @@ const SearchResults = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [sortedResults, setSortedResults] = useState(results);
   const [downloading, setDownloading] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     setSortedResults(results);
   }, [results]);
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      try {
+        const id = localStorage.getItem("userId");
+        const password = localStorage.getItem("userPw");
+        if (!id || !password) {
+          setIsAdmin(false);
+          return;
+        }
+
+        const res = await axios.post("http://localhost:8080/api/admin/check", {
+          id,
+          password,
+        });
+        setIsAdmin(res.data === true);
+      } catch (err) {
+        console.error("관리자 확인 실패:", err);
+        setIsAdmin(false);
+      }
+    };
+
+    checkAdmin();
+  }, []);
 
   // 현재 페이지에 표시할 데이터 계산
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -48,7 +73,6 @@ const SearchResults = ({
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-  const isAdmin = localStorage.getItem("isAdmin") === "true";
 
   const handleExcelDownload = async () => {
     if (downloading) return; //중복클릭방지
@@ -113,7 +137,7 @@ const SearchResults = ({
             disabled={downloading}
             aria-busy={downloading}
             aria-label={downloading ? "다운로드 진행 중" : "검색 결과 Excel 다운로드"}
-          >
+          > 
             {downloading && (
               <span className="spinner" aria-hidden="true" />
             )}

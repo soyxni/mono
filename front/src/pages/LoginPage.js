@@ -11,7 +11,9 @@ const LoginPage = () => {
         try {
             const res = await axios.post("http://localhost:8080/api/admin/login", {id:userid, password});
             if (res.data === "로그인 성공"){
-                localStorage.setItem("isAdmin", "true");
+                localStorage.setItem("userId", userid);
+                localStorage.setItem("userPw", password);
+
                 navigate("/");
             } else {
                 alert("로그인 실패");
