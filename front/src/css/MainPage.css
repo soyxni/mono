@@ -124,3 +124,19 @@
   cursor: not-allowed;
 }
 
+.spinner{
+  display:inline-block;
+  width:16px;
+  height:16px;
+  margin-right:8px;
+  border:2px solid rgba(0,0,0,.2);
+  border-top-color:currentColor;
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+  vertical-align:-2px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.excel-download-btn.loading{
+  cursor:progress;opacity:.85;pointer-events:none;
+}

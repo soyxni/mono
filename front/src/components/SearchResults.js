@@ -14,6 +14,7 @@ const SearchResults = ({
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortedResults, setSortedResults] = useState(results);
+  const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
     setSortedResults(results);
@@ -50,14 +51,28 @@ const SearchResults = ({
   const isAdmin = localStorage.getItem("isAdmin") === "true";
 
   const handleExcelDownload = async () => {
+    if (downloading) return; //중복클릭방지
     try {
+      setDownloading(true); //로딩 시작
+      console.log("downloading:", downloading);
       const payload = {
-        results,                  // 기존 결과 배열
-        sidoCdNm: selectedSido || "전체",   
-        sgguCdNm: selectedSggu || "전체",   
-        clCdNm: selectedClCd || "전체",     
-        npayKorNm: selectedNpay || "",  
-      };
+        results: results.map(r => ({
+          yadmNm: r.yadmNm,
+          clCdNm: r.clCdNm,
+          sidoCdNm: r.sidoCdNm,
+          sgguCdNm: r.sgguCdNm,
+          npayKorNm: r.npayKorNm,
+          curAmt: r.curAmt,
+          minPrc: r.minPrc,
+          maxPrc: r.maxPrc,
+          medianPrc: r.medianPrc
+        })),
+        sidoCdNm: selectedSido && selectedSido !== "전체" ? selectedSido : null,
+        sgguCdNm: selectedSggu && selectedSggu !== "전체" ? selectedSggu : null,
+        clCdNm: selectedClCd && selectedClCd !== "전체" ? selectedClCd : null,
+        // 🔽 배열 대신 문자열 라벨 ("중분류 외 2건")만 보냄
+        npayKorNm: typeof selectedNpay === "string" ? selectedNpay : null
+      };   
   
       const res = await axios.post(
         "http://localhost:8080/api/admin/excel-download",
@@ -82,6 +97,8 @@ const SearchResults = ({
     } catch (err) {
       console.error(err);
       alert("엑셀 다운로드 실패");
+    } finally{
+      setDownloading(false); //로딩종료
     }
   };
 
@@ -90,8 +107,17 @@ const SearchResults = ({
       <div className="results-header">
         <span>검색결과 총 {results.length}건</span>
         {isAdmin && (
-          <button className="excel-download-btn" onClick={handleExcelDownload}>
-            검색 결과 Excel 다운받기
+          <button 
+            className={`excel-download-btn ${downloading ? "loading" : ""}`}
+            onClick={handleExcelDownload}
+            disabled={downloading}
+            aria-busy={downloading}
+            aria-label={downloading ? "다운로드 진행 중" : "검색 결과 Excel 다운로드"}
+          >
+            {downloading && (
+              <span className="spinner" aria-hidden="true" />
+            )}
+            {downloading ? "다운로드 중…" : "검색 결과 Excel 다운받기"}
           </button>
         )}
         <div className="controls">
