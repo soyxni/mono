@@ -1831,7 +1831,9 @@ const SearchSection = ({ setSearchResults }) => {
   const handleCityChange = (e) => {
     const city = e.target.value;
     setSelectedCity(city);
+    setSelectedSido?.(city || "");
     setSelectedDistrict("");
+    setSelectedSggu?.("");
     setTowns([]);
     setDistricts(cityDistrictMap[city] ? Object.keys(cityDistrictMap[city]) : []);
   };
@@ -1839,10 +1841,26 @@ const SearchSection = ({ setSearchResults }) => {
   const handleDistrictChange = (e) => {
     const district = e.target.value;
     setSelectedDistrict(district);
+    setSelectedSggu?.(district || "");
     setTowns(cityDistrictMap[selectedCity]?.[district] || []);
   };
 
+  const handleClcdChange = (e) => {
+    const v = e.target.value;                // "전체" 포함
+    setSelectedClCdNm(v);
+    setSelectedClCd?.(v || "");              // 🔹 부모에 반영
+  };
+
   const handleSearchFromModal = (npayKorNmList) => {
+    const npayLabel = 
+        Array.isArray(npayKorNmList) && npayKorNmList.length > 0
+        ? (npayKorNmList.length === 1
+            ? npayKorNmList[0]
+            : `${npayKorNmList[0]} 외 ${npayKorNmList.length - 1}건`)
+        : "";
+
+    setSelectedNpay?.(npayLabel);
+
     const requestData = {
       sidoCdNm: selectedCity === "전체" ? null : selectedCity,
       sgguCdNm: selectedDistrict === "전체" ? null : selectedDistrict,
@@ -1900,7 +1918,13 @@ const SearchSection = ({ setSearchResults }) => {
           <option value="상급종합병원">상급종합병원</option>
           <option value="종합병원">종합병원</option>
           <option value="병원">병원</option>
+          <option value="요양병원">요양병원</option>
+          <option value="정신병원">정신병원</option>
+          <option value="치과병원">치과병원</option>
+          <option value="한방병원">한방병원</option>
           <option value="의원">의원</option>
+          <option value="치과의원">치과의원</option>
+          <option value="한의원">한의원</option>
         </select>
       </div>
 

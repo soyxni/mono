@@ -7,6 +7,11 @@ import { useNavigate } from "react-router-dom";
 const MainPage = () => {
     const [isSearchTabOpen, setIsSearchTabOpen] = useState(false); // 검색 섹션 열림 상태 관리
     const [searchResults, setSearchResults] = useState([]);
+
+    const [selectedSido, setSelectedSido] = useState("");   
+    const [selectedSggu, setSelectedSggu] = useState("");   
+    const [selectedClCd, setSelectedClCd] = useState("");  
+    const [selectedNpay, setSelectedNpay] = useState("");
     
     const navigate = useNavigate();
     const [isAdmin, setIsAdmin] = useState(false);
@@ -30,7 +35,14 @@ const MainPage = () => {
                     transition: "width 0.3s ease",
                 }}
             >
-                {isSearchTabOpen && <SearchSection setSearchResults={setSearchResults}/>} {/* 탭이 열렸을 때만 렌더링 */}
+                {isSearchTabOpen && 
+                <SearchSection 
+                    setSearchResults={setSearchResults}
+                    setSelectedSido={setSelectedSido}
+                    setSelectedSggu={setSelectedSggu}
+                    setSelectedClCd={setSelectedClCd}
+                    setSelectedNpay={setSelectedNpay}
+                />} {/* 탭이 열렸을 때만 렌더링 */}
             </div>
 
             <div style={{ position: "absolute", top: "20px", right: "30px" }}>
@@ -53,7 +65,13 @@ const MainPage = () => {
             {/* 메인 페이지 */}
             <div className="main-content" style={{ marginLeft: isSearchTabOpen ? "40%" : "0" }}>
                 <h1>비급여 진료비용 정보</h1>
-                <SearchResults results={searchResults}/>
+                <SearchResults 
+                    results={searchResults}
+                    selectedSido={selectedSido}
+                    selectedSggu={selectedSggu}
+                    selectedClCd={selectedClCd}
+                    selectedNpay={selectedNpay}
+                />
             </div>
 
             {/* 탭 토글 버튼 */}

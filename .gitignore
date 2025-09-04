@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# Node / React
+node_modules/
+build/
+dist/
+
+# Java / Spring
+target/
+*.log
+
+# IDE
+.idea/
+.vscode/
+
+# env
+.env
+.env.*
