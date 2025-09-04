@@ -1514,7 +1514,13 @@ const modalOptions = {
     ]
 };
 
-const SearchSection = ({ setSearchResults }) => {
+const SearchSection = ({ 
+    setSearchResults,
+    setSelectedSido,
+    setSelectedSggu,
+    setSelectedClCd,
+    setSelectedNpay
+}) => {
   const [selectedButton, setSelectedButton] = useState(null);
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
