@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import SearchSection from "../components/SearchSection";
 import SearchResults from "../components/SearchResults";
 import axios from "axios";
-
 import "../css/MainPage.css"; // MainPage 스타일
 import { useNavigate } from "react-router-dom";
 
@@ -17,30 +16,25 @@ const MainPage = () => {
     
     const navigate = useNavigate();
     const [isAdmin, setIsAdmin] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        const checkAdmin = async () => {
-            try {
-                const id = localStorage.getItem("userId");
-                const password = localStorage.getItem("userPw");
-                if (!id || !password) {
+        const id = localStorage.getItem("userId");
+        const password = localStorage.getItem("userPw");
+
+        if (id && password) {
+            setIsLoggedIn(true);
+
+            axios.post("http://localhost:8080/api/admin/check", {id, password})
+                .then(res => setIsAdmin(res.data === true))
+                .catch(err => {
+                    console.error("관리자 확인 실패", err);
                     setIsAdmin(false);
-                    return;
-                }
-
-                const res = await axios.post("http://localhost:8080/api/admin/check", {
-                    id,
-                    password,
                 });
-
-                setIsAdmin(res.data === true); // 백엔드에서 true 내려주면 관리자
-            } catch (err) {
-                console.error("관리자 확인 실패:", err);
-                setIsAdmin(false);
-            }
-        };
-
-        checkAdmin();
+        } else {
+            setIsLoggedIn(false);
+            setIsAdmin(false);
+        }
     }, []);
 
     const toggleSearchTab = () => {
@@ -70,12 +64,12 @@ const MainPage = () => {
             <div style={{ position: "absolute", top: "20px", right: "30px" }}>
                 {isAdmin ? (
                     <button
-                    onClick={() => {
-                        localStorage.removeItem("userId");
-                        localStorage.removeItem("userPw");
-                        setIsAdmin(false);
-                        navigate("/");
-                    }}
+                        onClick={() => {
+                            localStorage.removeItem("userId");
+                            localStorage.removeItem("userPw");
+                            setIsAdmin(false);
+                            navigate("/");
+                        }}
                     >
                         로그아웃
                     </button>
@@ -94,6 +88,7 @@ const MainPage = () => {
                     selectedSggu={selectedSggu}
                     selectedClCd={selectedClCd}
                     selectedNpay={selectedNpay}
+                    isAdmin={isAdmin}
                 />
             </div>
 
